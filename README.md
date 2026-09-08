@@ -7,14 +7,15 @@ Payload-agnostic. For Payload CMS rules and skill vendoring, use [`@dappermounta
 ## Install
 
 ```bash
-npm install -D @dappermountain/agent-practices
-# or: bun add -d @dappermountain/agent-practices
+bun add -d @dappermountain/agent-practices
 ```
 
 Installing the package does **not** activate rules in Cursor. Run sync so files land under `.agents/`:
 
 ```bash
-npx @dappermountain/agent-practices sync
+bunx @dappermountain/agent-practices sync
+# or after install:
+bun run agents:sync
 ```
 
 Recommended `package.json` script:
@@ -56,7 +57,7 @@ Canonical content lives under **`.agents/`**. Do not duplicate rule files under 
 | Cursor discovery | `.cursor/rules` → `.agents/rules` | `.cursor/skills` → `.agents/skills` |
 | `skills` CLI | Not applicable | Installs skill folders only |
 
-Publishing to npm does not register Cursor rules by itself — consumers must run sync.
+Installing from the registry does not register Cursor rules by itself — consumers must run sync.
 
 ## CLI
 
