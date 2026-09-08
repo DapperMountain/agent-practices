@@ -1,0 +1,42 @@
+{
+  "name": "@dappermountain/agent-practices",
+  "version": "0.1.0",
+  "description": "Reusable coding-agent practices: Bun, commits, clean code, TypeScript, workflow, and optional monorepo rules. Sync copies into .agents/rules for Cursor.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "agent-practices": "./bin/sync.ts"
+  },
+  "files": [
+    "bin",
+    "rules",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DapperMountain/agent-practices.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DapperMountain/agent-practices/issues"
+  },
+  "homepage": "https://github.com/DapperMountain/agent-practices#readme",
+  "author": "Dapper Mountain",
+  "keywords": [
+    "agents",
+    "cursor",
+    "rules",
+    "bun",
+    "devmoji"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "sync": "bun ./bin/sync.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

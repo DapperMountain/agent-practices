@@ -1,0 +1,30 @@
+---
+description: Monorepo workspace layout, dependency declaration, and build-from-root conventions
+alwaysApply: true
+---
+
+# Monorepo
+
+This repository is a **multi-package workspace** (apps + packages, or equivalent). Single-package repos should not have this rule synced in.
+
+## Reading order
+
+1. Root `AGENTS.md` (or equivalent) — layout, package manager, tooling.
+2. Shared agent context — `.agents/` (rules + skills).
+3. Package/app overlay — when editing a workspace package, read that package’s `AGENTS.md` and `.agents/` when present.
+
+## Where dependencies are declared
+
+**Declare a package in the lowest workspace that actually imports it.** Anything a workspace resolves only through root hoisting is a phantom dependency: it works until the linker layout or the root manifest changes. If two workspaces both import it directly, both declare it — a library shared by apps belongs in the shared package.
+
+**Repo-wide tooling belongs at the root**, because every workspace uses it and a single version is the point (e.g. TypeScript, ESLint, Prettier, Turbo, git hooks, shared `@types/*`). Framework-specific tooling belongs in the app that needs it.
+
+When auditing, prefer `bunx depcheck <workspace>`. It cannot see packages resolved only through bundler aliases, `tsconfig` `extends`, ESLint configs loaded by name, or type-only `@types/*` — verify each hit before removing it.
+
+## Build from root
+
+Prefer building from the repository root with a workspace runner (Turbo or equivalent) and filters so dependency packages build first. Per-package `build` is for isolated/atomic work only.
+
+## Documentation sync (monorepo paths)
+
+When doc-sync checklists mention `apps/<app>/…` or package overlays, update those locations in the same session. Base `agent-workflow` stays generic; path-specific checklists live in the consumer’s `AGENTS.md` / `.agents/` / app docs.
