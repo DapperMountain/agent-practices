@@ -1,6 +1,6 @@
 {
   "name": "@dappermountain/agent-practices",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Reusable coding-agent practices: Bun, commits, clean code, TypeScript, workflow, and optional monorepo rules. Sync copies into .agents/rules for Cursor.",
   "license": "MIT",
   "type": "module",
