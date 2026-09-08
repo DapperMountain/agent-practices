@@ -2,70 +2,67 @@
 
 Reusable **Cursor / coding-agent rules** (`.mdc`) for Bun, Devmoji commits, clean code, TypeScript, and agent workflow. Optional **`monorepo.mdc`** is copied only for monorepo consumers.
 
-This package is **Payload-agnostic**. For Payload CMS rules and skill vendoring, use [`@dappermountain/agent-payload`](https://github.com/DapperMountain/agent-payload).
+Payload-agnostic. For Payload CMS rules and skill vendoring, use [`@dappermountain/agent-payload`](https://www.npmjs.com/package/@dappermountain/agent-payload).
 
-## Rules vs skills
-
-| | **Rules (`.mdc`)** | **Skills (`SKILL.md`)** |
-| --- | --- | --- |
-| What this package ships | Standing constraints (`alwaysApply` / globs) | — (none) |
-| How Cursor loads them | Via `.cursor/rules` → `.agents/rules` | Via `.cursor/skills` → `.agents/skills` |
-| npm / `skills` CLI | **Not** skill packages | Installs skill folders only |
-
-Installing the package into `node_modules` does **not** activate rules. You must run **`agents:sync`** (or this package’s `sync` CLI) so files land under `.agents/`.
-
-## Install (GitHub first)
+## Install
 
 ```bash
-bun add -d github:DapperMountain/agent-practices
+npm install -D @dappermountain/agent-practices
+# or: bun add -d @dappermountain/agent-practices
 ```
 
-Then sync into the consumer repo:
+Installing the package does **not** activate rules in Cursor. Run sync so files land under `.agents/`:
 
 ```bash
-bunx @dappermountain/agent-practices sync
-# or from a script:
-bun run agents:sync
+npx @dappermountain/agent-practices sync
 ```
 
-Recommended consumer `package.json` script:
+Recommended `package.json` script:
 
 ```json
 {
   "scripts": {
-    "agents:sync": "bunx @dappermountain/agent-practices sync"
+    "agents:sync": "agent-practices sync"
   }
 }
 ```
 
-When also using `@dappermountain/agent-payload`, run **practices sync then payload sync** (or use payload’s composed `agents:sync`).
+When also using `@dappermountain/agent-payload`, prefer that package’s `agents:sync` (it runs practices sync first, then Payload rules/overlay).
 
 ## What sync does
 
 1. Copies always-on rules into `.agents/rules/`:
    - `bun.mdc`, `commits.mdc`, `clean.mdc`, `typescript.mdc`, `agent-workflow.mdc`
-2. Copies `monorepo.mdc` **only if** the consumer looks like a monorepo, or you pass `--monorepo`:
+2. Copies `monorepo.mdc` **only if** the consumer looks like a monorepo, or `--monorepo` is passed:
    - `package.json` has `"workspaces"`, **or**
    - `turbo.json` exists, **or**
    - `pnpm-workspace.yaml` exists, **or**
    - CLI flag `--monorepo`
-3. Removes a stale `monorepo.mdc` when syncing a single-package repo (use `--no-monorepo` to force skip).
+3. Removes a stale `monorepo.mdc` when syncing a single-package repo (`--no-monorepo` forces skip).
 4. Ensures Cursor discovery symlinks (idempotent):
 
-```bash
+```text
 .cursor/rules  -> ../.agents/rules
 .cursor/skills -> ../.agents/skills
 ```
 
 Canonical content lives under **`.agents/`**. Do not duplicate rule files under `.cursor/`.
 
-## Prefer sync over postinstall
+## Rules vs skills
 
-Bun blocks untrusted lifecycle scripts for GitHub dependencies. Consumers should run `agents:sync` explicitly after install / upgrade.
+| | **Rules (`.mdc`)** | **Skills (`SKILL.md`)** |
+| --- | --- | --- |
+| This package | Standing constraints (`alwaysApply` / globs) | — |
+| Cursor discovery | `.cursor/rules` → `.agents/rules` | `.cursor/skills` → `.agents/skills` |
+| `skills` CLI | Not applicable | Installs skill folders only |
 
-## npm later
+Publishing to npm does not register Cursor rules by itself — consumers must run sync.
 
-Same pattern as other `@dappermountain/*` packages: publish to npm; `files` includes `rules/` and `bin/`. Publishing alone does not register Cursor rules — sync still required.
+## CLI
+
+```text
+agent-practices sync [cwd] [--monorepo] [--no-monorepo]
+```
 
 ## License
 
