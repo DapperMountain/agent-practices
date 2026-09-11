@@ -109,7 +109,7 @@ function main(): void {
     unlinkSync(monorepoDest)
     console.log(`removed stale ${monorepoDest}`)
   } else {
-    console.log(`skip ${MONOREPO_RULE} (not a monorepo)`)
+    console.log(`skip ${MONOREPO_RULE} (single-package repo)`)
   }
 
   ensureSymlink(join(cwd, '.cursor', 'rules'), '../.agents/rules')
